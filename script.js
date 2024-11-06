@@ -495,3 +495,13 @@ gsap.to('.retro-text-container', {
 });
 
 animateCursor();
+
+// JavaScript to show/hide the scroll-indicator based on the scroll position
+window.addEventListener('scroll', () => {
+  const scrollIndicator = document.querySelector('.scroll-indicator');
+  if (window.scrollY > 100) {
+    scrollIndicator.style.display = 'none';
+  } else {
+    scrollIndicator.style.display = 'block';
+  }
+});
