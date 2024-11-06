@@ -495,16 +495,3 @@ gsap.to('.retro-text-container', {
 });
 
 animateCursor();
-
-// Functionality to handle scrolling and display the scroll indicator
-function handleScroll() {
-  const scrollIndicator = document.querySelector('.scroll-indicator');
-  if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 50) {
-    scrollIndicator.style.display = 'none';
-  } else {
-    scrollIndicator.style.display = 'block';
-  }
-}
-
-window.addEventListener('scroll', handleScroll);
-handleScroll();
