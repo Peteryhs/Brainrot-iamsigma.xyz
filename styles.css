@@ -486,3 +486,31 @@ body {
 .terminal-button:active {
   filter: brightness(0.8);
 }
+
+/* Scroll Indicator Styles */
+.scroll-indicator {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 30px;
+  background-color: rgba(78, 205, 196, 0.7);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+  animation: pulsate 1.5s infinite;
+  z-index: 1000;
+}
+
+/* Pulsating animation */
+@keyframes pulsate {
+  0% {
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.2);
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+}
