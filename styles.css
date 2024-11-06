@@ -455,3 +455,34 @@ body {
     height: 5px;
   }
 }
+
+/* Windows 11 style buttons */
+.terminal-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+  position: relative;
+}
+
+.terminal-button.close {
+  background-color: #ff5f56;
+}
+
+.terminal-button.minimize {
+  background-color: #ffbd2e;
+}
+
+.terminal-button.maximize {
+  background-color: #27c93f;
+}
+
+/* Hover effects for buttons */
+.terminal-button:hover {
+  filter: brightness(1.2);
+}
+
+/* Active effects for buttons */
+.terminal-button:active {
+  filter: brightness(0.8);
+}
