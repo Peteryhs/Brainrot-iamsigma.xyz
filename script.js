@@ -1,7 +1,9 @@
+// Typing animation
 const text = "I AM SIGMA";
 const retroText = document.getElementById('retro-text');
 let charIndex = 0;
 
+// Terminal functionality
 const quotes = [
   "> Initializing sigma_OS v2.0...",
   "> Loading quantum mindset modules...",
@@ -14,8 +16,10 @@ const terminalText = document.getElementById('terminal-text');
 const terminalContainer = document.querySelector('.terminal-container');
 const maxMessages = 15;
 
+// Add vignette and scanlines
 document.body.insertAdjacentHTML('beforeend', '<div class="vignette"></div><div class="scanlines"></div>');
 
+// Command System Class
 class CommandSystem {
   constructor() {
     this.commandHistory = [];
@@ -63,32 +67,6 @@ class CommandSystem {
         fn: () => this.enterFocusMode()
       },
     };
-
-    this.initializeButtons();
-  }
-
-  initializeButtons() {
-    const closeButton = document.querySelector('.terminal-button.close');
-    const minimizeButton = document.querySelector('.terminal-button.minimize');
-    const maximizeButton = document.querySelector('.terminal-button.maximize');
-
-    closeButton.addEventListener('click', () => this.closeTerminal());
-    minimizeButton.addEventListener('click', () => this.minimizeTerminal());
-    maximizeButton.addEventListener('click', () => this.maximizeTerminal());
-  }
-
-  closeTerminal() {
-    terminalContainer.style.display = 'none';
-  }
-
-  minimizeTerminal() {
-    terminalContainer.style.height = '30px';
-    terminalContainer.style.overflow = 'hidden';
-  }
-
-  maximizeTerminal() {
-    terminalContainer.style.height = 'auto';
-    terminalContainer.style.overflow = 'auto';
   }
 
   print(message, type = 'default') {
@@ -111,6 +89,7 @@ class CommandSystem {
     line.innerHTML = `<span class="terminal-timestamp">[${timestamp}]</span> <span style="color: ${typeColors[type] || typeColors.default}">${message}</span>`;
     terminalText.appendChild(line);
 
+    // Remove old lines
     const lines = Array.from(terminalText.getElementsByClassName('terminal-line'));
     if (lines.length > maxMessages) {
       const linesToRemove = lines.slice(0, lines.length - maxMessages);
@@ -124,17 +103,21 @@ class CommandSystem {
       });
     }
 
+    // Scroll to bottom
     terminalText.scrollTop = terminalText.scrollHeight;
   }
 
   handleCommand(commandText) {
     if (!commandText) return;
 
+    // Add to history
     this.commandHistory.push(commandText);
     this.historyIndex = this.commandHistory.length;
 
+    // Parse command and arguments
     const [cmd, ...args] = commandText.toLowerCase().split(' ');
 
+    // Execute command
     if (this.commands[cmd]) {
       try {
         this.commands[cmd].fn(args);
@@ -332,6 +315,7 @@ class CommandSystem {
   }
 }
 
+// Initialize command system
 const cmdSystem = new CommandSystem();
 
 function typeText() {
@@ -368,6 +352,7 @@ function createTerminalLine(text) {
 }
 
 function startTerminalAnimation() {
+  // Initial boot sequence
   quotes.forEach((quote, index) => {
     setTimeout(() => {
       const line = createTerminalLine(quote);
@@ -376,6 +361,7 @@ function startTerminalAnimation() {
     }, index * 1000);
   });
 
+  // After boot sequence, show command prompt
   setTimeout(() => {
     const inputContainer = document.createElement('div');
     inputContainer.className = 'command-line';
@@ -405,12 +391,14 @@ function initializeCommandInput() {
     }
   });
 
+  // Keep focus on input
   document.addEventListener('click', () => {
     const input = document.getElementById('command-input');
     if (input) input.focus();
   });
 }
 
+// Parallax effect
 function handleMouseMove(e) {
   const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
   const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
@@ -430,6 +418,7 @@ function handleMouseMove(e) {
   });
 }
 
+// Custom cursor
 const cursor = document.querySelector('.cursor');
 const cursorFollower = document.querySelector('.cursor-follower');
 
@@ -458,12 +447,7 @@ document.addEventListener('mousemove', (e) => {
   handleMouseMove(e);
 });
 
-document.addEventListener('touchmove', (e) => {
-  mouseX = e.touches[0].clientX;
-  mouseY = e.touches[0].clientY;
-  handleMouseMove(e);
-});
-
+// Handle cursor visibility
 document.addEventListener('mouseleave', () => {
   cursor.style.opacity = 0;
   cursorFollower.style.opacity = 0;
@@ -474,16 +458,7 @@ document.addEventListener('mouseenter', () => {
   cursorFollower.style.opacity = 1;
 });
 
-document.addEventListener('touchstart', () => {
-  cursor.style.opacity = 1;
-  cursorFollower.style.opacity = 1;
-});
-
-document.addEventListener('touchend', () => {
-  cursor.style.opacity = 0;
-  cursorFollower.style.opacity = 0;
-});
-
+// Start animations
 gsap.to('.retro-text-container', {
   opacity: 1,
   x: 0,
@@ -494,14 +469,5 @@ gsap.to('.retro-text-container', {
   }
 });
 
+// Initialize cursor animation
 animateCursor();
-
-// JavaScript to show/hide the scroll-indicator based on the scroll position
-window.addEventListener('scroll', () => {
-  const scrollIndicator = document.querySelector('.scroll-indicator');
-  if (window.scrollY > 100) {
-    scrollIndicator.style.display = 'none';
-  } else {
-    scrollIndicator.style.display = 'block';
-  }
-});
