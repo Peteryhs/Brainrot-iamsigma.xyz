@@ -426,4 +426,32 @@ body {
     color: var(--terminal-accent);
   }
 
-  
+/* Media Queries for Mobile Devices */
+@media (max-width: 768px) {
+  .retro-text {
+    font-size: 8vw;
+  }
+
+  .domain-text {
+    font-size: 4vw;
+  }
+
+  .terminal-container {
+    width: 100%;
+    margin-top: 2rem;
+  }
+
+  .terminal-content {
+    font-size: 1rem;
+  }
+
+  .cursor {
+    width: 15px;
+    height: 15px;
+  }
+
+  .cursor-follower {
+    width: 5px;
+    height: 5px;
+  }
+}
