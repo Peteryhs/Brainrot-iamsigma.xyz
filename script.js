@@ -63,6 +63,32 @@ class CommandSystem {
         fn: () => this.enterFocusMode()
       },
     };
+
+    this.initializeButtons();
+  }
+
+  initializeButtons() {
+    const closeButton = document.querySelector('.terminal-button.close');
+    const minimizeButton = document.querySelector('.terminal-button.minimize');
+    const maximizeButton = document.querySelector('.terminal-button.maximize');
+
+    closeButton.addEventListener('click', () => this.closeTerminal());
+    minimizeButton.addEventListener('click', () => this.minimizeTerminal());
+    maximizeButton.addEventListener('click', () => this.maximizeTerminal());
+  }
+
+  closeTerminal() {
+    terminalContainer.style.display = 'none';
+  }
+
+  minimizeTerminal() {
+    terminalContainer.style.height = '30px';
+    terminalContainer.style.overflow = 'hidden';
+  }
+
+  maximizeTerminal() {
+    terminalContainer.style.height = 'auto';
+    terminalContainer.style.overflow = 'auto';
   }
 
   print(message, type = 'default') {
