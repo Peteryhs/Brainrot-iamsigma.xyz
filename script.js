@@ -495,3 +495,70 @@ gsap.to('.retro-text-container', {
 });
 
 animateCursor();
+
+function createParticle(x, y) {
+  const particle = document.createElement('div');
+  particle.className = 'particle';
+  particle.style.left = `${x}px`;
+  particle.style.top = `${y}px`;
+  document.body.appendChild(particle);
+  return particle;
+}
+
+function animateParticles(x, y) {
+  for (let i = 0; i < 10; i++) {
+    const particle = createParticle(x, y);
+    const angle = Math.random() * 2 * Math.PI;
+    const distance = Math.random() * 100;
+    const destinationX = x + Math.cos(angle) * distance;
+    const destinationY = y + Math.sin(angle) * distance;
+
+    gsap.to(particle, {
+      x: destinationX,
+      y: destinationY,
+      opacity: 0,
+      duration: 1,
+      ease: 'power2.out',
+      onComplete: () => {
+        particle.remove();
+      }
+    });
+  }
+}
+
+let lastMouseMoveTime = 0;
+let mouseStoppedTimeout;
+
+document.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  handleMouseMove(e);
+
+  lastMouseMoveTime = Date.now();
+  clearTimeout(mouseStoppedTimeout);
+  mouseStoppedTimeout = setTimeout(() => {
+    if (Date.now() - lastMouseMoveTime >= 100) {
+      animateParticles(mouseX, mouseY);
+    }
+  }, 100);
+});
+
+document.addEventListener('mouseleave', () => {
+  cursor.style.opacity = 0;
+  cursorFollower.style.opacity = 0;
+});
+
+document.addEventListener('mouseenter', () => {
+  cursor.style.opacity = 1;
+  cursorFollower.style.opacity = 1;
+});
+
+document.addEventListener('touchstart', () => {
+  cursor.style.opacity = 1;
+  cursorFollower.style.opacity = 1;
+});
+
+document.addEventListener('touchend', () => {
+  cursor.style.opacity = 0;
+  cursorFollower.style.opacity = 0;
+});
