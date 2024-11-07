@@ -1,8 +1,269 @@
 // Typing animation
+
 const text = "I AM SIGMA";
-const retroText = document.getElementById('retro-text');
 let charIndex = 0;
 
+document.addEventListener('DOMContentLoaded', async () => {
+  // Hide the main content and retro text initially
+  const container = document.querySelector('.container');
+  const retroText = document.getElementById('retro-text');
+  container.style.display = 'none';
+  retroText.style.opacity = '0';
+
+  // Start boot sequence
+  const bootSequence = new BootSequence();
+  await bootSequence.start();
+
+  // After boot sequence, show container and start typing
+  container.style.display = 'block';
+  container.classList.add('fade-in');
+  
+  // Start the typing animation
+  function typeText() {
+    if (charIndex < text.length) {
+      retroText.textContent += text.charAt(charIndex);
+      charIndex++;
+      setTimeout(typeText, 100 + Math.random() * 100);
+    } else {
+      // After typing is complete, show terminal
+      setTimeout(() => {
+        gsap.to('.terminal-container', {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          onComplete: () => {
+            startTerminalAnimation();
+            initializeCommandInput();
+          }
+        });
+      }, 500);
+    }
+  }
+
+  // Make retro text visible and start typing
+  retroText.style.opacity = '1';
+  retroText.textContent = '';
+  setTimeout(typeText, 500);
+});
+
+
+class BootSequence {
+  constructor() {
+    this.bootContainer = document.createElement('div');
+    this.bootContainer.className = 'boot-sequence';
+    document.body.appendChild(this.bootContainer);
+    
+    this.bootMessages = [
+      { text: 'INITIALIZING SIGMA_OS v2.0...', delay: 100 },
+      { text: 'PERFORMING MEMORY CHECK...', delay: 80 },
+      { text: '[OK] 32GB SIGMA MINDSET CAPACITY DETECTED', delay: 100 },
+      { text: 'LOADING CORE DRIVERS:', delay: 50 },
+      { text: '  > GRINDSET.SYS', delay: 30 },
+      { text: '  > FOCUS.DRV', delay: 30 },
+      { text: '  > DISCIPLINE.DLL', delay: 30 },
+      { text: '  > WEALTH.EXE', delay: 30 },
+      { text: 'CHECKING BETA RESISTANCE LEVELS... [100%]', delay: 120, progress: true },
+      { text: 'OPTIMIZING NEURAL PATHWAYS... [100%]', delay: 100, progress: true },
+      { text: 'ESTABLISHING MARKET DOMINANCE... [100%]', delay: 150, progress: true },
+      { text: 'VALIDATING SIGMA PROTOCOLS...', delay: 80 },
+      { text: '[WARNING] DETECTING BETA MINDSET IN VICINITY', delay: 100, type: 'warning' },
+      { text: '[OK] BETA RESISTANCE SHIELDS ACTIVATED', delay: 80 },
+      { text: 'CALIBRATING FOCUS ALGORITHMS... [100%]', delay: 120, progress: true },
+      { text: 'SIGMA_OS BOOT SEQUENCE COMPLETE', delay: 100, type: 'success' },
+      { text: 'ENTERING SIGMA SPACE...', delay: 150 }
+    ];
+  }
+
+  async start() {
+    // Hide main content initially
+    document.querySelector('.container').style.display = 'none';
+    
+    // Show boot container
+    this.bootContainer.style.display = 'block';
+    
+    // Add glitch overlay
+    const glitchOverlay = document.createElement('div');
+    glitchOverlay.className = 'glitch-overlay';
+    this.bootContainer.appendChild(glitchOverlay);
+
+    // Process each boot message
+    for (let msg of this.bootMessages) {
+      await this.showBootMessage(msg);
+    }
+
+    // Final transition
+    await this.transitionToMain();
+  }
+
+  async showBootMessage({ text, delay, type = 'info', progress = false }) {
+    const line = document.createElement('div');
+    line.className = 'boot-line';
+    if (type) line.classList.add(`boot-${type}`);
+    
+    // Create timestamp
+    const timestamp = new Date().toLocaleTimeString('en-US', {
+      hour12: false,
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      fractionalSecondDigits: 3
+    });
+    
+    if (progress) {
+      // Show progress bar
+      const progressText = text.split('[')[0];
+      line.innerHTML = `[${timestamp}] ${progressText}[`;
+      
+      const progressBar = document.createElement('span');
+      progressBar.className = 'boot-progress';
+      line.appendChild(progressBar);
+      
+      line.innerHTML += ']';
+      this.bootContainer.appendChild(line);
+      
+      await this.animateProgress(progressBar);
+    } else {
+      line.innerHTML = `[${timestamp}] ${text}`;
+      this.bootContainer.appendChild(line);
+    }
+
+    // Add glitch effect randomly
+    if (Math.random() < 0.3) {
+      line.classList.add('glitch-text');
+    }
+
+    // Scroll to bottom
+    this.bootContainer.scrollTop = this.bootContainer.scrollHeight;
+    
+    await new Promise(resolve => setTimeout(resolve, delay));
+  }
+
+  async animateProgress(progressBar) {
+    let width = 0;
+    const interval = setInterval(() => {
+      if (width >= 100) {
+        clearInterval(interval);
+      } else {
+        width += 2;
+        progressBar.style.width = width + '%';
+      }
+    }, 20);
+
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+
+  async transitionToMain() {
+    // Add final glitch effect
+    this.bootContainer.classList.add('glitch-out');
+    
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    // Hide boot sequence
+    this.bootContainer.style.display = 'none';
+    
+    // Show main content
+    const container = document.querySelector('.container');
+    container.style.display = 'block';
+    container.classList.add('fade-in');
+  }
+}
+const bootStyles = `
+.boot-progress-container {
+  margin: 10px 0;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid rgba(0, 255, 0, 0.2);
+  background: rgba(0, 255, 0, 0.05);
+}
+
+.boot-progress-bar {
+  height: 20px;
+  width: 100%;
+  background: #0a0a0a;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0, 255, 0, 0.3);
+}
+
+.boot-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(
+    90deg,
+    #00ff00 0%,
+    #88ff00 50%,
+    #00ff00 100%
+  );
+  background-size: 200% 100%;
+  animation: gradientMove 2s linear infinite;
+  position: relative;
+  transition: width 0.05s linear;
+}
+
+.boot-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    transparent 0%,
+    rgba(0, 255, 0, 0.2) 50%,
+    transparent 100%
+  );
+  animation: scanline 1s linear infinite;
+}
+
+.boot-progress-text {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #00ff00;
+  text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  z-index: 1;
+}
+
+.boot-stats {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+  font-size: 12px;
+  color: rgba(0, 255, 0, 0.8);
+}
+
+@keyframes gradientMove {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.boot-section {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid rgba(0, 255, 0, 0.1);
+  background: rgba(0, 255, 0, 0.02);
+}
+
+.boot-section-title {
+  color: #00ff00;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.loading-detail {
+  font-size: 12px;
+  color: rgba(0, 255, 0, 0.7);
+  margin: 2px 0;
+}`;
 // Terminal functionality
 const quotes = [
   "> Initializing sigma_OS v2.0...",
@@ -19,11 +280,150 @@ const maxMessages = 15;
 // Add vignette and scanlines
 document.body.insertAdjacentHTML('beforeend', '<div class="vignette"></div><div class="scanlines"></div>');
 
-// Command System Class
+class StatTracker {
+  constructor(commandSystem) {
+    this.commandSystem = commandSystem;  // Store reference to command system
+    this.stats = {
+      focusLevel: { value: 90, trend: 'up', max: 100 },
+      grindStatus: { value: 100, trend: 'stable', max: 100 },
+      socialBattery: { value: 0, trend: 'down', max: 100 },
+      mindsetLevel: { value: 85, trend: 'up', max: 100 },
+      productivity: { value: 75, trend: 'up', max: 100 },
+      betaResistance: { value: 100, trend: 'stable', max: 100 }
+    };
+
+    this.isDisplaying = false;  // Track if stats are being displayed
+    
+    // Start periodic updates
+    setInterval(() => {
+      this.updateStats();
+      if (this.isDisplaying) {
+        this.commandSystem.clearTerminal();
+        this.commandSystem.showStats();
+      }
+    }, 3000);
+  }
+
+  updateStats() {
+    for (let stat in this.stats) {
+      // Random fluctuation based on trend
+      const fluctuation = Math.random() * 5 - 2;
+      let newValue = this.stats[stat].value;
+
+      switch (this.stats[stat].trend) {
+        case 'up':
+          newValue += Math.abs(fluctuation);
+          break;
+        case 'down':
+          newValue -= Math.abs(fluctuation);
+          break;
+        case 'stable':
+          newValue += fluctuation;
+          break;
+      }
+
+      // Ensure value stays within bounds
+      this.stats[stat].value = Math.min(Math.max(Math.round(newValue), 0), this.stats[stat].max);
+
+      // Dynamically update trends based on value thresholds
+      if (this.stats[stat].value <= 10) {
+        this.stats[stat].trend = 'up';  // Start increasing if too low
+      } else if (this.stats[stat].value >= 95) {
+        this.stats[stat].trend = 'down';  // Start decreasing if too high
+      }
+    }
+
+    // Special case: social battery should always trend downward
+    this.stats.socialBattery.trend = 'down';
+    // Beta resistance should stay stable and high
+    this.stats.betaResistance.trend = 'stable';
+  }
+
+  startDisplaying() {
+    this.isDisplaying = true;
+  }
+
+  stopDisplaying() {
+    this.isDisplaying = false;
+  }
+
+  getStatBar(value, max = 100, width = 10) {
+    const filledCount = Math.round((value / max) * width);
+    const emptyCount = width - filledCount;
+    
+    let fillChar = '█';
+    if (value < 30) fillChar = '▒';  // Low value indicator
+    else if (value < 70) fillChar = '▓';  // Medium value indicator
+
+    return fillChar.repeat(filledCount) + '░'.repeat(emptyCount);
+  }
+
+  getTrendIndicator(trend) {
+    switch (trend) {
+      case 'up': return '↑';
+      case 'down': return '↓';
+      case 'stable': return '→';
+      default: return '-';
+    }
+  }
+
+  getStatColor(value) {
+    if (value >= 80) return 'rgb(78, 205, 196)';  // Cyan for high values
+    if (value >= 50) return 'rgb(255, 217, 61)';  // Yellow for medium values
+    return 'rgb(255, 107, 107)';                  // Red for low values
+  }
+
+  // Helper method to get readable stat name
+  formatStatName(name) {
+    return name.replace(/([A-Z])/g, ' $1').trim();
+  }
+
+  // Helper method to get status description
+  getStatusDescription(statName, value) {
+    const descriptions = {
+      focusLevel: {
+        high: "Maximum concentration achieved",
+        medium: "Focus maintaining",
+        low: "Distraction detected"
+      },
+      grindStatus: {
+        high: "Sigma grindset optimal",
+        medium: "Grind intensity acceptable",
+        low: "Grind harder required"
+      },
+      socialBattery: {
+        high: "WARNING: Too social",
+        medium: "Acceptable isolation",
+        low: "Perfect solitude achieved"
+      },
+      mindsetLevel: {
+        high: "Peak sigma mentality",
+        medium: "Mindset developing",
+        low: "Beta thoughts detected"
+      },
+      productivity: {
+        high: "Maximum efficiency",
+        medium: "Output acceptable",
+        low: "Efficiency compromised"
+      },
+      betaResistance: {
+        high: "Beta immunity active",
+        medium: "Resistance holding",
+        low: "WARNING: Beta influence detected"
+      }
+    };
+
+    if (value >= 80) return descriptions[statName].high;
+    if (value >= 50) return descriptions[statName].medium;
+    return descriptions[statName].low;
+  }
+}
+
 class CommandSystem {
   constructor() {
     this.commandHistory = [];
     this.historyIndex = -1;
+    this.statTracker = new StatTracker(this);  // Pass 'this' to StatTracker
     
     this.commands = {
       help: {
@@ -52,7 +452,15 @@ class CommandSystem {
       },
       stats: {
         desc: 'Display current sigma metrics',
-        fn: () => this.showStats()
+        fn: () => {
+          this.statTracker.startDisplaying();  // Start auto-updating
+          this.showStats();
+          
+          // Optional: Stop updating after a certain time
+          setTimeout(() => {
+            this.statTracker.stopDisplaying();
+          }, 30000); // Stop after 30 seconds
+        }
       },
       hack: {
         desc: 'Simulate a "hacking" sequence',
@@ -69,7 +477,7 @@ class CommandSystem {
     };
   }
 
-  print(message, type = 'default') {
+  print(message, type = 'default', color = null) {
     const line = document.createElement('div');
     line.className = 'terminal-line';
     
@@ -80,28 +488,14 @@ class CommandSystem {
       second: '2-digit'
     });
 
-    const typeColors = {
+    const messageColor = color || {
       system: 'rgb(78, 205, 196)',
       error: 'rgb(255, 107, 107)',
       default: '#00ff00'
-    };
+    }[type];
 
-    line.innerHTML = `<span class="terminal-timestamp">[${timestamp}]</span> <span style="color: ${typeColors[type] || typeColors.default}">${message}</span>`;
+    line.innerHTML = `<span class="terminal-timestamp">[${timestamp}]</span> <span style="color: ${messageColor}">${message}</span>`;
     terminalText.appendChild(line);
-
-    // Remove old lines
-    const lines = Array.from(terminalText.getElementsByClassName('terminal-line'));
-    if (lines.length > maxMessages) {
-      const linesToRemove = lines.slice(0, lines.length - maxMessages);
-      linesToRemove.forEach(line => {
-        line.classList.add('fade-out');
-        setTimeout(() => {
-          if (line.parentNode === terminalText) {
-            terminalText.removeChild(line);
-          }
-        }, 500);
-      });
-    }
 
     // Scroll to bottom
     terminalText.scrollTop = terminalText.scrollHeight;
@@ -159,12 +553,13 @@ class CommandSystem {
     ];
     rules.forEach(rule => this.print(rule, 'system'));
   }
+
   showAbout() {
     const about = [
       'SIGMA_OS - Advanced Mindset Operating System',
       'Version: 2.0',
       'Build: 20241105',
-      'Created by: [REDACTED]',
+      'Created by: [███████]',
       'Purpose: Maximize efficiency, eliminate weakness'
     ];
     about.forEach(line => this.print(line, 'system'));
@@ -191,18 +586,6 @@ class CommandSystem {
     ░╚═══██╗██║██║░░╚██╗██║╚██╔╝██║██╔══██║
     ██████╔╝██║╚██████╔╝██║░╚═╝░██║██║░░██║
     ╚═════╝░╚═╝░╚═════╝░╚═╝░░░░░╚═╝╚═╝░░╚═╝`,
-      wolf: `
-         ╭━━━━╮
-         ┃▇▇▇▇┃
-      ╭━┫▇▇▇▇┣━╮
-     ┃  ┃▇▇▇▇┃  ┃
-     ╰┳╯╰━━━━╯╰┳╯
-      ┃   ╭━╮   ┃
-      ┃   ┃ ┃   ┃
-      ┃   ╰━╯   ┃
-      ┃    ╭━╮  ┃
-      ┃    ┃ ┃  ┃
-      ╰━━━━╯ ╰━━╯`
     };
 
     if (art[type]) {
@@ -227,17 +610,37 @@ class CommandSystem {
   }
 
   showStats() {
-    const stats = [
-      "╔════════ SIGMA METRICS ════════╗",
-      "║ Focus Level    : [█████████░] ║",
-      "║ Grind Status   : [██████████] ║",
-      "║ Social Battery : [░░░░░░░░░░] ║",
-      "║ Mindset Level  : [████████░░] ║",
-      "║ Productivity   : [███████░░░] ║",
-      "║ Beta Resistance: [██████████] ║",
-      "╚════════════════════════════════╝"
-    ];
-    stats.forEach(stat => this.print(stat, 'system'));
+    const stats = this.statTracker.stats;
+    
+    // Header
+    this.print('SIGMA METRICS:', 'system');
+    this.print('-------------', 'system');
+
+    // Stats
+    for (let [name, stat] of Object.entries(stats)) {
+      const formattedName = this.statTracker.formatStatName(name).padEnd(15, ' ');
+      const bar = this.statTracker.getStatBar(stat.value);
+      const trend = this.statTracker.getTrendIndicator(stat.trend);
+      const value = stat.value.toString().padStart(3);
+      const desc = this.statTracker.getStatusDescription(name, stat.value);
+      const color = this.statTracker.getStatColor(stat.value);
+
+      // Combined stat line with description
+      this.print(
+        `${formattedName} [${bar}] ${value}% ${trend} | ${desc}`,
+        'default',
+        color
+      );
+    }
+
+    // Footer
+
+    const timeStamp = new Date().toLocaleTimeString('en-US', {
+      hour12: false,
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    this.print(`Last updated: ${timeStamp}`, 'system');
   }
 
   simulateHack() {
@@ -361,22 +764,25 @@ function startTerminalAnimation() {
     }, index * 1000);
   });
 
-  // After boot sequence, show command prompt
+  // After boot sequence, just focus the existing input
   setTimeout(() => {
-    const inputContainer = document.createElement('div');
-    inputContainer.className = 'command-line';
-    inputContainer.innerHTML = `
-      <span class="prompt-symbol">λ</span>
-      <input type="text" id="command-input" spellcheck="false" autocomplete="off" placeholder="Type 'help' for commands...">
-    `;
-    terminalText.appendChild(inputContainer);
-    
     const input = document.getElementById('command-input');
-    input.focus();
+    if (input) {
+      input.focus();
+    }
   }, quotes.length * 1000 + 500);
 }
 
+// Remove any existing duplicate command lines when initializing
 function initializeCommandInput() {
+  // Remove any duplicate command-line elements that might exist
+  const commandLines = document.querySelectorAll('.command-line');
+  if (commandLines.length > 1) {
+    for (let i = 1; i < commandLines.length; i++) {
+      commandLines[i].remove();
+    }
+  }
+
   document.addEventListener('keydown', (e) => {
     const input = document.getElementById('command-input');
     if (!input) return;
@@ -471,3 +877,149 @@ gsap.to('.retro-text-container', {
 
 // Initialize cursor animation
 animateCursor();
+
+// Updated terminal formatting functions
+function formatTerminalMessage(message, type = 'default') {
+  const line = document.createElement('div');
+  line.className = 'terminal-line';
+  
+  const timestamp = new Date().toLocaleTimeString('en-US', {
+    hour12: false,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  });
+
+  // Different message type formatting
+  let messageContent = message;
+  if (type === 'error') {
+    messageContent = `<div class="msg-error">${message}</div>`;
+  } else if (type === 'success') {
+    messageContent = `<div class="msg-success">${message}</div>`;
+  } else if (type === 'warning') {
+    messageContent = `<div class="msg-warning">${message}</div>`;
+  } else if (type === 'system') {
+    messageContent = `<div class="msg-system">${message}</div>`;
+  }
+
+  line.innerHTML = `
+    <span class="terminal-timestamp">[${timestamp}]</span>
+    <span class="terminal-message">${messageContent}</span>
+  `;
+
+  return line;
+}
+
+// Enhanced command handling
+function handleCommand(command) {
+  const args = command.split(' ');
+  const cmd = args[0].toLowerCase();
+
+  // Add command to history with proper formatting
+  terminalText.appendChild(formatTerminalMessage(`λ ${command}`, 'command'));
+
+  switch(cmd) {
+    case 'clear':
+      clearTerminal();
+      break;
+    case 'help':
+      showHelp();
+      break;
+    // ... other commands ...
+    default:
+      terminalText.appendChild(
+        formatTerminalMessage(`Command not found: ${cmd}`, 'error')
+      );
+      terminalText.appendChild(
+        formatTerminalMessage('Type "help" for available commands.', 'system')
+      );
+  }
+
+  // Scroll to bottom with smooth animation
+  terminalText.scrollTo({
+    top: terminalText.scrollHeight,
+    behavior: 'smooth'
+  });
+}
+
+// Function to show progress for long-running commands
+function showProgress(message, duration = 1000) {
+  const progressLine = document.createElement('div');
+  progressLine.className = 'terminal-line';
+  progressLine.innerHTML = `
+    <span class="terminal-timestamp">[${getCurrentTime()}]</span>
+    <span class="terminal-message">
+      ${message}
+      <div class="progress-bar"></div>
+    </span>
+  `;
+  terminalText.appendChild(progressLine);
+}
+
+// Function to show tables in terminal
+function showTerminalTable(headers, data) {
+  let tableHTML = '<table class="terminal-table"><thead><tr>';
+  
+  // Add headers
+  headers.forEach(header => {
+    tableHTML += `<th>${header}</th>`;
+  });
+  tableHTML += '</tr></thead><tbody>';
+  
+  // Add data rows
+  data.forEach(row => {
+    tableHTML += '<tr>';
+    row.forEach(cell => {
+      tableHTML += `<td>${cell}</td>`;
+    });
+    tableHTML += '</tr>';
+  });
+  
+  tableHTML += '</tbody></table>';
+  
+  const line = formatTerminalMessage(tableHTML);
+  terminalText.appendChild(line);
+}
+
+// Function to show ASCII art with proper formatting
+function showAsciiArt(art) {
+  const line = document.createElement('div');
+  line.className = 'terminal-line';
+  line.innerHTML = `
+    <span class="terminal-timestamp">[${getCurrentTime()}]</span>
+    <pre class="ascii-art">${art}</pre>
+  `;
+  terminalText.appendChild(line);
+}
+
+// Helper function to get current time
+function getCurrentTime() {
+  return new Date().toLocaleTimeString('en-US', {
+    hour12: false,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  });
+}
+
+// Add loading animation for commands
+function simulateLoading(message, callback) {
+  const frames = ['-', '\\', '|', '/'];
+  let i = 0;
+  
+  const loadingLine = formatTerminalMessage(`${message} ${frames[0]}`);
+  terminalText.appendChild(loadingLine);
+  
+  const interval = setInterval(() => {
+    i = (i + 1) % frames.length;
+    loadingLine.querySelector('.terminal-message').textContent = 
+      `${message} ${frames[i]}`;
+  }, 100);
+  
+  setTimeout(() => {
+    clearInterval(interval);
+    loadingLine.remove();
+    callback();
+  }, 1000);
+}
+
