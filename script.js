@@ -46,7 +46,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   setTimeout(typeText, 500);
 });
 
-
 class BootSequence {
   constructor() {
     this.bootContainer = document.createElement('div');
@@ -270,7 +269,7 @@ const quotes = [
   "> Loading quantum mindset modules...",
   "> Bypassing social construct limitations...",
   "> Calculating parallel grindset trajectories...",
-  "> Optimizing workflow for maximum gains...",
+  "> Initialized gallery DB...",
 ];
 
 const terminalText = document.getElementById('terminal-text');
@@ -430,6 +429,10 @@ class CommandSystem {
         desc: 'Show available commands',
         fn: () => this.showHelp()
       },
+      gallery: {
+        desc: 'Access the sigma image database',
+        fn: () => this.accessGallery()
+      },
       clear: {
         desc: 'Clear terminal output',
         fn: () => this.clearTerminal()
@@ -474,6 +477,7 @@ class CommandSystem {
         desc: 'Enter deep focus mode',
         fn: () => this.enterFocusMode()
       },
+
     };
   }
 
@@ -715,6 +719,25 @@ class CommandSystem {
     } else {
       this.print('Available colors: ' + Object.keys(colors).join(', '), 'error');
     }
+  }
+
+  accessGallery() {
+    this.print('ACCESSING SIGMA IMAGE DATABASE...', 'system');
+    this.print('ESTABLISHING SECURE CONNECTION...', 'system');
+    
+    // Simulate loading
+    setTimeout(() => {
+      this.print('CONNECTION ESTABLISHED', 'success');
+      this.print('REDIRECTING TO SECURE VIEWER...', 'system');
+      
+      // Add glitch effect to whole page before redirect
+      document.body.classList.add('glitch-effect');
+      
+      // Redirect after effects
+      setTimeout(() => {
+        window.location.href = 'gallery.html';
+      }, 1000);
+    }, 1500);
   }
 }
 
@@ -1022,4 +1045,3 @@ function simulateLoading(message, callback) {
     callback();
   }, 1000);
 }
-

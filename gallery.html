@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGMA OS - Gallery</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="gallery.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Background effects -->
+    <div class="noise"></div>
+    <div class="bg-grid"></div>
+    <div class="bg-gradient"></div>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+
+    <!-- Main container -->
+    <div class="container">
+        <div class="file-explorer">
+            <div class="explorer-header">
+                <div class="header-title">SIGMA_OS > IMAGE_DATABASE</div>
+                <div class="header-controls">
+                    <span class="control minimize">_</span>
+                    <span class="control maximize">□</span>
+                    <span class="control close">×</span>
+                </div>
+            </div>
+            <div class="explorer-toolbar">
+                <div class="path-breadcrumb">
+                    <span class="path-segment">ROOT</span>
+                    <span class="path-separator">/</span>
+                    <span class="path-segment">SIGMA</span>
+                    <span class="path-separator">/</span>
+                    <span class="path-segment">IMAGES</span>
+                </div>
+                <div class="view-controls">
+                    <button class="view-btn details-view active">DETAILS</button>
+                </div>
+            </div>
+            <div class="explorer-content">
+                <div class="file-list">
+                    <div class="file-list-header">
+                        <div class="column-header thumbnail">Preview</div>
+                        <div class="column-header name">Name</div>
+                        <div class="column-header size">Size</div>
+                        <div class="column-header date">Date</div>
+                        <div class="column-header type">Type</div>
+                    </div>
+                    <!-- Files will be added here by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terminal access point -->
+    <div class="terminal-access">
+        <div class="terminal-access-content">
+            <div class="access-icon">λ</div>
+            <div class="access-text">TERMINAL_ACCESS_POINT</div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="gallery.js"></script>
+</body>
+</html>
