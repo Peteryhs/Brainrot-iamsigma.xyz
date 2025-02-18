@@ -1,4 +1,3 @@
-// Sample gallery items (replace with your own images)
 const galleryItems = [
     {
         image: 'https://cdn.brainrot.best/DSC03575.JPG',
@@ -237,7 +236,7 @@ function initTerminalAccess() {
     terminalAccess.addEventListener('click', () => {
         terminalAccess.classList.add('active');
         setTimeout(() => {
-            window.location.href = 'index.html';
+            window.location.href = 'gallery.html';
         }, 1000);
     });
 }
